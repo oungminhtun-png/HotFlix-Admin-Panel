@@ -4,14 +4,16 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 import AuthGuard from 'components/AuthGuard'; // import လုပ်ထားပြီးသား
+import UsersList from '../pages/users/view/UsersList';
+import Users_create from '../pages/users/entry/Users_create';
+import UsersDetail from '../pages/users/view/UsersDetail';
+import Users_update from '../pages/users/entry/Users_update';
 
 // render- Dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
 
-// render - color
-const Color = Loadable(lazy(() => import('pages/component-overview/color')));
-const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
-const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
+
+
 
 // render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
@@ -40,22 +42,13 @@ const MainRoutes = {
         }
       ]
     },
-    {
-      path: 'typography',
-      element: <Typography />
-    },
-    {
-      path: 'color',
-      element: <Color />
-    },
-    {
-      path: 'shadow',
-      element: <Shadow />
-    },
-    {
-      path: 'sample-page',
-      element: <SamplePage />
-    }
+    //Users Route
+    { path: 'users/list', element: <UsersList />},
+    { path: 'users/create', element: <Users_create />},
+    { path: 'users/:id', element: <UsersDetail />},
+    { path: 'users/update/:id', element: <Users_update />}
+
+    
   ]
 };
 

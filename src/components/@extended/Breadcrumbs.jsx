@@ -18,6 +18,8 @@ import ApartmentOutlined from '@ant-design/icons/ApartmentOutlined';
 import HomeOutlined from '@ant-design/icons/HomeOutlined';
 import HomeFilled from '@ant-design/icons/HomeFilled';
 
+// ==============================|| REUSABLE BREADCRUMBS ||============================== //
+
 export default function Breadcrumbs({
   card = false,
   custom = false,
@@ -30,7 +32,7 @@ export default function Breadcrumbs({
   rightAlign,
   separator,
   title = true,
-  titleBottom = true,
+  titleBottom = false, // Title နှစ်ခုမထပ်အောင် ဒီမှာ false ထားပေးထားပါတယ်
   sx,
   ...others
 }) {
@@ -45,12 +47,11 @@ export default function Breadcrumbs({
     marginLeft: 0,
     width: '1rem',
     height: '1rem',
-    color: theme.vars.palette.secondary.main
+    color: theme.palette.secondary.main
   };
 
   let customLocation = location.pathname;
 
-  // only used for component demo breadcrumbs
   if (customLocation.includes('/components-overview/breadcrumbs')) {
     customLocation = '/apps/customer/customer-card';
   }
@@ -69,7 +70,6 @@ export default function Breadcrumbs({
     });
   });
 
-  // set active item state
   const getCollapse = (menu) => {
     if (!custom && menu.children) {
       menu.children.filter((collapse) => {
@@ -90,7 +90,6 @@ export default function Breadcrumbs({
     }
   };
 
-  // item separator
   const SeparatorIcon = separator;
   const separatorIcon = separator ? <SeparatorIcon style={{ fontSize: '0.75rem', marginTop: 2 }} /> : '/';
 
@@ -115,48 +114,11 @@ export default function Breadcrumbs({
         {main?.title}
       </Typography>
     );
-
-    if (!!custom) {
-      breadcrumbContent = (
-        <MainCard
-          border={card}
-          sx={card === false ? { mb: 3, bgcolor: 'inherit', backgroundImage: 'none', ...sx } : { mb: 3, ...sx }}
-          {...others}
-          content={card}
-          shadow="none"
-        >
-          <Grid
-            container
-            direction={rightAlign ? 'row' : 'column'}
-            spacing={1}
-            sx={{ justifyContent: rightAlign ? 'space-between' : 'flex-start', alignItems: rightAlign ? 'center' : 'flex-start' }}
-          >
-            <Grid>
-              <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon}>
-                <Typography component={Link} to="/" color="text.secondary" variant="h6" sx={{ textDecoration: 'none' }}>
-                  {icons && <HomeOutlined style={iconSX} />}
-                  {icon && !icons && <HomeFilled style={{ ...iconSX, marginRight: 0 }} />}
-                  {(!icon || icons) && 'Home'}
-                </Typography>
-                {mainContent}
-              </MuiBreadcrumbs>
-            </Grid>
-            {title && titleBottom && (
-              <Grid sx={{ mt: card === false ? 0.25 : 1 }}>
-                <Typography variant="h2">{main.title}</Typography>
-              </Grid>
-            )}
-          </Grid>
-          {card === false && divider !== false && <Divider sx={{ mt: 2 }} />}
-        </MainCard>
-      );
-    }
   }
 
   // items
   if ((item && item.type === 'item') || (item?.type === 'group' && item?.url) || custom) {
     itemTitle = item?.title;
-
     ItemIcon = item?.icon ? item.icon : ApartmentOutlined;
     itemContent = (
       <Typography variant="subtitle1" color="text.primary">
@@ -182,7 +144,6 @@ export default function Breadcrumbs({
         <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon}>
           {links?.map((link, index) => {
             CollapseIcon = link.icon ? link.icon : ApartmentOutlined;
-
             return (
               <Typography
                 key={index}
@@ -200,38 +161,41 @@ export default function Breadcrumbs({
       );
     }
 
-    // main
-    if (item?.breadcrumbs !== false || custom) {
-      breadcrumbContent = (
-        <MainCard
-          border={card}
-          sx={card === false ? { mb: 3, bgcolor: 'inherit', backgroundImage: 'none', ...sx } : { mb: 3, ...sx }}
-          {...others}
-          content={card}
-          shadow="none"
+    // main layout
+    breadcrumbContent = (
+      <MainCard
+        border={card}
+        sx={card === false ? { mb: 3, bgcolor: 'inherit', backgroundImage: 'none', ...sx } : { mb: 3, ...sx }}
+        {...others}
+        content={card}
+        shadow="none"
+      >
+        <Grid
+          container
+          direction={rightAlign ? 'row' : 'column'}
+          spacing={1}
+          sx={{ justifyContent: rightAlign ? 'space-between' : 'flex-start', alignItems: rightAlign ? 'center' : 'flex-start' }}
         >
-          <Grid
-            container
-            direction={rightAlign ? 'row' : 'column'}
-            spacing={1}
-            sx={{ justifyContent: rightAlign ? 'space-between' : 'flex-start', alignItems: rightAlign ? 'center' : 'flex-start' }}
-          >
-            {title && !titleBottom && (
-              <Grid>
-                <Typography variant="h2">{custom ? heading : item?.title}</Typography>
-              </Grid>
-            )}
-            <Grid>{tempContent}</Grid>
-            {title && titleBottom && (
-              <Grid sx={{ mt: card === false ? 0.25 : 1 }}>
-                <Typography variant="h2">{custom ? heading : item?.title}</Typography>
-              </Grid>
-            )}
-          </Grid>
-          {card === false && divider !== false && <Divider sx={{ mt: 2 }} />}
-        </MainCard>
-      );
-    }
+          {/* အပေါ်မှာ Title ပြချင်ရင် ပြဖို့ (ပုံမှန်အားဖြင့် မပြပါ) */}
+          {title && !titleBottom && heading && (
+            <Grid>
+              <Typography variant="h2">{custom ? heading : item?.title}</Typography>
+            </Grid>
+          )}
+
+          {/* Breadcrumbs (Home / Users List) လမ်းကြောင်း */}
+          <Grid>{tempContent}</Grid>
+
+          {/* Title Bottom အကြီးကြီးကို ဖျက်လိုက်ပါပြီ (Condition မှားနေရင် titleBottom={false} ဖြစ်နေလို့ မပေါ်တော့ပါဘူး) */}
+          {title && titleBottom && (
+            <Grid sx={{ mt: card === false ? 0.25 : 1 }}>
+              <Typography variant="h2">{custom ? heading : item?.title}</Typography>
+            </Grid>
+          )}
+        </Grid>
+        {card === false && divider !== false && <Divider sx={{ mt: 2 }} />}
+      </MainCard>
+    );
   }
 
   return breadcrumbContent;
@@ -250,6 +214,5 @@ Breadcrumbs.propTypes = {
   separator: PropTypes.any,
   title: PropTypes.bool,
   titleBottom: PropTypes.bool,
-  sx: PropTypes.any,
-  others: PropTypes.any
+  sx: PropTypes.any
 };

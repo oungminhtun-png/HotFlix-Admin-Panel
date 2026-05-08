@@ -1,10 +1,10 @@
 // project import
+import UsersRoutes from '../pages/users/Users_route';
 import dashboard from './dashboard';
-import pages from './page';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, pages]
+  items: [dashboard, UsersRoutes]
 };
 
 export default menuItems;
