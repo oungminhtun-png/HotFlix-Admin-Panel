@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // project imports
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
+import AuthGuard from 'components/AuthGuard'; // import လုပ်ထားပြီးသား
 
 // render- Dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
@@ -19,7 +20,12 @@ const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')))
 
 const MainRoutes = {
   path: '/',
-  element: <DashboardLayout />,
+  // အဓိက layout ကို AuthGuard နဲ့ အုပ်လိုက်ပါမယ်
+  element: (
+    <AuthGuard>
+      <DashboardLayout />
+    </AuthGuard>
+  ),
   children: [
     {
       path: '/',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // material-ui
 import Avatar from '@mui/material/Avatar';
@@ -59,6 +59,15 @@ const actionSX = {
 export default function DashboardDefault() {
   const [orderMenuAnchor, setOrderMenuAnchor] = useState(null);
   const [analyticsMenuAnchor, setAnalyticsMenuAnchor] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Login ဝင်ထားတဲ့ user data ကို ယူမယ်
+    const userData = localStorage.getItem('user_info');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
 
   const handleOrderMenuClick = (event) => {
     setOrderMenuAnchor(event.currentTarget);
@@ -76,9 +85,11 @@ export default function DashboardDefault() {
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      {/* row 1 */}
+      {/* row 1 - Welcome & Stats */}
       <Grid sx={{ mb: -2.25 }} size={12}>
-        <Typography variant="h5">Dashboard</Typography>
+        <Typography variant="h5">
+          Welcome Back, {user?.username || 'User'}! 👋
+        </Typography>
       </Grid>
       <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
         <AnalyticEcommerce title="Total Page Views" count="4,42,236" percentage={59.3} extra="35,000" />
@@ -93,7 +104,8 @@ export default function DashboardDefault() {
         <AnalyticEcommerce title="Total Sales" count="35,078" percentage={27.4} isLoss color="warning" extra="20,395" />
       </Grid>
       <Grid sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} size={{ md: 8 }} />
-      {/* row 2 */}
+
+      {/* row 2 - Charts */}
       <Grid size={{ xs: 12, md: 7, lg: 8 }}>
         <UniqueVisitorCard />
       </Grid>
@@ -102,7 +114,6 @@ export default function DashboardDefault() {
           <Grid>
             <Typography variant="h5">Income Overview</Typography>
           </Grid>
-          <Grid />
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
           <Box sx={{ p: 3, pb: 0 }}>
@@ -116,7 +127,8 @@ export default function DashboardDefault() {
           <MonthlyBarChart />
         </MainCard>
       </Grid>
-      {/* row 3 */}
+
+      {/* row 3 - Recent Orders Table */}
       <Grid size={{ xs: 12, md: 7, lg: 8 }}>
         <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <Grid>
@@ -128,7 +140,6 @@ export default function DashboardDefault() {
             </IconButton>
             <Menu
               id="fade-menu"
-              slotProps={{ list: { 'aria-labelledby': 'fade-button' } }}
               anchorEl={orderMenuAnchor}
               onClose={handleOrderMenuClose}
               open={Boolean(orderMenuAnchor)}
@@ -145,6 +156,8 @@ export default function DashboardDefault() {
           <OrdersTable />
         </MainCard>
       </Grid>
+
+      {/* row 3 - Analytics Report List */}
       <Grid size={{ xs: 12, md: 5, lg: 4 }}>
         <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <Grid>
@@ -156,7 +169,6 @@ export default function DashboardDefault() {
             </IconButton>
             <Menu
               id="fade-menu"
-              slotProps={{ list: { 'aria-labelledby': 'fade-button' } }}
               anchorEl={analyticsMenuAnchor}
               open={Boolean(analyticsMenuAnchor)}
               onClose={handleAnalyticsMenuClose}
@@ -187,7 +199,8 @@ export default function DashboardDefault() {
           <ReportAreaChart />
         </MainCard>
       </Grid>
-      {/* row 4 */}
+
+      {/* row 4 - Sale Report & Transaction History */}
       <Grid size={{ xs: 12, md: 7, lg: 8 }}>
         <SaleReportCard />
       </Grid>
@@ -196,7 +209,6 @@ export default function DashboardDefault() {
           <Grid>
             <Typography variant="h5">Transaction History</Typography>
           </Grid>
-          <Grid />
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
           <List
@@ -217,12 +229,8 @@ export default function DashboardDefault() {
               divider
               secondaryAction={
                 <Stack sx={{ alignItems: 'flex-end' }}>
-                  <Typography variant="subtitle1" noWrap>
-                    + $1,430
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    78%
-                  </Typography>
+                  <Typography variant="subtitle1" noWrap>+ $1,430</Typography>
+                  <Typography variant="h6" color="secondary" noWrap>78%</Typography>
                 </Stack>
               }
             >
@@ -238,12 +246,8 @@ export default function DashboardDefault() {
               divider
               secondaryAction={
                 <Stack sx={{ alignItems: 'flex-end' }}>
-                  <Typography variant="subtitle1" noWrap>
-                    + $302
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    8%
-                  </Typography>
+                  <Typography variant="subtitle1" noWrap>+ $302</Typography>
+                  <Typography variant="h6" color="secondary" noWrap>8%</Typography>
                 </Stack>
               }
             >
@@ -258,12 +262,8 @@ export default function DashboardDefault() {
               component={ListItemButton}
               secondaryAction={
                 <Stack sx={{ alignItems: 'flex-end' }}>
-                  <Typography variant="subtitle1" noWrap>
-                    + $682
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    16%
-                  </Typography>
+                  <Typography variant="subtitle1" noWrap>+ $682</Typography>
+                  <Typography variant="h6" color="secondary" noWrap>16%</Typography>
                 </Stack>
               }
             >
@@ -276,25 +276,23 @@ export default function DashboardDefault() {
             </ListItem>
           </List>
         </MainCard>
+
+        {/* Support Chat Card */}
         <MainCard sx={{ mt: 2 }}>
           <Stack sx={{ gap: 3 }}>
             <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
               <Grid>
                 <Stack>
-                  <Typography variant="h5" noWrap>
-                    Help & Support Chat
-                  </Typography>
-                  <Typography variant="caption" color="secondary" noWrap>
-                    Typical replay within 5 min
-                  </Typography>
+                  <Typography variant="h5" noWrap>Help & Support Chat</Typography>
+                  <Typography variant="caption" color="secondary" noWrap>Typical replay within 5 min</Typography>
                 </Stack>
               </Grid>
               <Grid>
                 <AvatarGroup sx={{ '& .MuiAvatar-root': { width: 32, height: 32 } }}>
-                  <Avatar alt="Remy Sharp" src={avatar1} />
-                  <Avatar alt="Travis Howard" src={avatar2} />
-                  <Avatar alt="Cindy Baker" src={avatar3} />
-                  <Avatar alt="Agnes Walker" src={avatar4} />
+                  <Avatar alt="User 1" src={avatar1} />
+                  <Avatar alt="User 2" src={avatar2} />
+                  <Avatar alt="User 3" src={avatar3} />
+                  <Avatar alt="User 4" src={avatar4} />
                 </AvatarGroup>
               </Grid>
             </Grid>
