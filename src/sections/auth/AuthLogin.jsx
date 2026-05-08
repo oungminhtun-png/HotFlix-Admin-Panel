@@ -78,6 +78,12 @@ export default function AuthLogin() {
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
+              {/* Error Alert */}
+              {errors.submit && (
+                <Grid size={12}>
+                  <Alert severity="error">{errors.submit}</Alert>
+                </Grid>
+              )}
               {/* Email Section */}
               <Grid size={12}>
                 <Stack spacing={1}>
@@ -137,12 +143,7 @@ export default function AuthLogin() {
                 </Stack>
               </Grid>
 
-              {/* Error Alert */}
-              {errors.submit && (
-                <Grid size={12}>
-                  <Alert severity="error">{errors.submit}</Alert>
-                </Grid>
-              )}
+              
 
               {/* Login Button */}
               <Grid size={12}>
