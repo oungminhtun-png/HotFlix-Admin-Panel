@@ -1,5 +1,5 @@
 //\src\endpoints\endpoints.js
-export const API_BASE_URL = 'https://cherrywintkyaw.pythonanywhere.com/api';
+export const API_BASE_URL = 'https://cherrywintkyaw.pythonanywhere.com/api/';
 export const IMAGE_BASE_URL = 'https://cherrywintkyaw.pythonanywhere.com';
 
 export const ENDPOINTS = {
@@ -13,7 +13,7 @@ export const ENDPOINTS = {
     USERS_DELETE: (id) => `${API_BASE_URL}/users_delete/${id}/`,
     USERS_DELETE_ALL: `${API_BASE_URL}/users_delete_all/`,
 
-    // Banners
+    // Banner
     BANNER_LIST: `${API_BASE_URL}/banner_list/`,
     BANNER_CREATE: `${API_BASE_URL}/banner_create/`,
     BANNER_DETAIL: (id) => `${API_BASE_URL}/banner_detail/${id}/`,
@@ -29,7 +29,7 @@ export const ENDPOINTS = {
     MOVIE_DELETE: (id) => `${API_BASE_URL}/movie_delete/${id}/`,
     MOVIE_DELETE_ALL: `${API_BASE_URL}/movie_delete_all/`,
 
-    // Genres
+    // Genre
     GENRE_LIST: `${API_BASE_URL}/genre_list/`,
     GENRE_CREATE: `${API_BASE_URL}/genre_create/`,
     GENRE_DETAIL: (id) => `${API_BASE_URL}/genre_detail/${id}/`,

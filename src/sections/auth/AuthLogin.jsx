@@ -58,19 +58,29 @@ export default function AuthLogin() {
               password: values.password
             });
 
-            if (response.data.tokens) {
-              localStorage.setItem('access_token', response.data.tokens.access);
+            // tokens ရှိမရှိ အရင်စစ်ပါမယ်
+            if (response.data && response.data.tokens) {
+              
+              /**
+               * အရေးကြီးဆုံးပြင်ဆင်ချက်- 
+               * 'access_token' အစား 'serviceToken' ဆိုတဲ့ နာမည်နဲ့ သိမ်းရပါမယ်။
+               * ဒါမှ AuthGuard က Login ဝင်ထားတယ်လို့ အသိအမှတ်ပြုမှာပါ။
+               */
+              localStorage.setItem('serviceToken', response.data.tokens.access);
               localStorage.setItem('refresh_token', response.data.tokens.refresh);
               localStorage.setItem('user_info', JSON.stringify(response.data.user));
 
               setStatus({ success: true });
               setSubmitting(false);
-              navigate('/dashboard/default');
+              
+              // Login အောင်မြင်ရင် Dashboard ကို ပို့ပါမယ်
+              navigate('/dashboard/default', { replace: true });
             }
           } catch (err) {
             console.error(err);
             setStatus({ success: false });
-            setErrors({ submit: err.response?.data?.message || 'Login failed. Please check your credentials.' });
+            // Error message ပြတဲ့အခါ API ကလာတဲ့ စာသားကို သေချာဖမ်းပြပါမယ်
+            setErrors({ submit: err.response?.data?.detail || err.response?.data?.message || 'Login failed. Please check your credentials.' });
             setSubmitting(false);
           }
         }}
@@ -80,12 +90,13 @@ export default function AuthLogin() {
             <Grid container spacing={3}>
               {/* Error Alert */}
               {errors.submit && (
-                <Grid size={12}>
+                <Grid item xs={12}>
                   <Alert severity="error">{errors.submit}</Alert>
                 </Grid>
               )}
-              {/* Email Section */}
-              <Grid size={12}>
+              
+              {/* Email/Username Section */}
+              <Grid item xs={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="email-login">Email Address / Username</InputLabel>
                   <OutlinedInput
@@ -108,7 +119,7 @@ export default function AuthLogin() {
               </Grid>
 
               {/* Password Section */}
-              <Grid size={12}>
+              <Grid item xs={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="password-login">Password</InputLabel>
                   <OutlinedInput
@@ -143,10 +154,8 @@ export default function AuthLogin() {
                 </Stack>
               </Grid>
 
-              
-
               {/* Login Button */}
-              <Grid size={12}>
+              <Grid item xs={12}>
                 <AnimateButton>
                   <Button
                     disableElevation
